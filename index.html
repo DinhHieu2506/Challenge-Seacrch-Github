@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Maname&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
+  <title>Vite App</title>
+  <link rel="stylesheet" href="./src/scss/main.scss">
+</head>
+
+<body class="container">
+  <header class="header">
+    <h1 class="header__title">devfinder</h1>
+    <button id="header-button" class="header__button" data-theme="light">
+      Dark
+      <img src="/src/images/icon-moon.svg" alt="" class="header__icons">
+    </button>
+  </header>
+
+  <main class="main">
+    <div class="searchBar">
+      <img src="/src/images/icon_search.svg" alt="search" class="searchBar__icon">
+      <label for="search" class="searchBar__label sr-only">Search GitHub useername</label>
+      <input type="text" id="search" class="searchBar__input " placeholder="Enter GitHub username...">
+      <div id="search-err" class="searchBar__err">No results</div>
+      <button class="searchBar__button" onclick=""> Search</button>
+    </div>
+
+    <article id="infos" class="profile-info">
+      <div class="profile-info__presentation">
+        <img src="/src/images/583231.png" alt="" class="profile-info__avatar">
+        <div class="profile-info__header-info">
+          <h2 id="obj-name" class="profile-info__name">The Octocat</h2>
+          <a href="" id="obj-username" class="profile-info__username" target="_blank">@octocat</a>
+          <p id="obj-date" class="profile-info__date">Joined 26 Jan 2011 </p>
+        </div>
+      </div>
+      <p id="obj-bio" class="profile-info__bio">This profile has no bio</p>
+      <div id="grid-data" class="profile-info__grid">
+        <p class="profile-info__label">Repos</p>
+        <p class="profile-info__label">Followers</p>
+        <p class="profile-info__label">Following</p>
+        <p id="obj-repos" class="profile-info__value">8</p>
+        <p id="obj-followers" class="profile-info__value">18324</p>
+        <p id="obj-following" class="profile-info__value">9</p>
+      </div>
+
+      <ul class="profile-info__social-links">
+        <li id="list-item1" class="profile-info__item">
+          <img src="/src/images/icon_location.svg" alt="" class="profile-info__icon">
+          <p id="obj-location" class="profile-info__text">San Francisco</p>
+        </li>
+        <li id="list-item2" class="profile-info__item">
+          <img src="/src/images/icon_website.svg" alt="" class="profile-info__icon">
+          <a href="https://github.blog/" id="obj-website" class="profile-info__text" target="_blank">https://github.blog</a>
+        </li>
+        <li id="list-item3" class="profile-info__item">
+          <img src="/src/images/icon_twitter.svg" alt="" class="profile-info__icon">
+          <a href="" id="obj-twitter" class="profile-info__text" target="_blank">Not Available</a>
+        </li>
+        <li id="list-item4" class="profile-info__item">
+          <img src="/src/images/icon_company.svg" alt="" class="profile-info__icon">
+          <a href="" id="obj-company" class="profile-info__text" target="_blank">@github</a>
+        </li>
+      </ul>
+    </article>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
