@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     themeToggleButton.innerHTML = `
       ${themeText}
-      <img class="header__icons" src="/src/images/${themeIcon}" alt="icon-${theme}-mode" />
+      <img class="header__icons" src="./src/images/${themeIcon}" alt="icon-${theme}-mode" />
     `;
 
     body.classList.toggle('dark-mode', theme === 'dark');
