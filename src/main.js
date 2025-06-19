@@ -119,9 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // --- Event Listeners ---
-  searchButton.addEventListener('click', () => fetchUser(searchInput.value));
+  searchButton.addEventListener('click', () => fetchUser(searchInput.value.trim()));
   searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') fetchUser(searchInput.value);
+    if (e.key === 'Enter') fetchUser(searchInput.value.trim());
   });
 
   // --- Init ---
