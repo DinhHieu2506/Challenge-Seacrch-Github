@@ -1,28 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // --- DOM Elements ---
+  
+  const API_URL = 'https://api.github.com/users/';
+  const body = document.body;
+
+  
   const themeToggleButton = document.getElementById('header-button');
   const searchInput = document.getElementById('search');
   const searchButton = document.querySelector('.searchBar__button');
   const errorMessage = document.getElementById('search-err');
-  const body = document.body;
 
-  // Elements within the profile card
   const avatar = document.querySelector('.profile-info__avatar');
   const userName = document.getElementById('obj-name');
   const userLogin = document.getElementById('obj-username');
   const joinDate = document.getElementById('obj-date');
-  const bio = document.getElementById('obj-bio'); 
+  const bio = document.getElementById('obj-bio');
   const repos = document.querySelector('#grid-data p:nth-child(4)');
   const followers = document.querySelector('#grid-data p:nth-child(5)');
   const following = document.querySelector('#grid-data p:nth-child(6)');
+
   const locationEl = document.getElementById('obj-location');
   const websiteEl = document.getElementById('obj-website');
   const twitterEl = document.getElementById('obj-twitter');
   const companyEl = document.getElementById('obj-company');
 
-  const API_URL = 'https://api.github.com/users/';
-
-  // Update UI Theme
+  
   const updateThemeUI = (theme) => {
     const themeText = theme === 'light' ? 'Dark' : 'Light';
     const themeIcon = theme === 'light' ? 'icon-moon.svg' : 'icon-sun.svg';
@@ -32,13 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
       <img class="header__icons" src="/src/images/${themeIcon}" alt="icon-${theme}-mode" />
     `;
 
-    if (theme === 'dark') {
-      body.classList.add('dark-mode');
-    } else {
-      body.classList.remove('dark-mode');
-    }
-
-    themeToggleButton.setAttribute('data-theme', theme);
+    body.classList.toggle('dark-mode', theme === 'dark');
+    themeToggleButton.dataset.theme = theme;
     localStorage.setItem('theme', theme);
   };
 
@@ -48,90 +44,87 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   themeToggleButton.addEventListener('click', () => {
-    const currentTheme = themeToggleButton.getAttribute('data-theme') || 'light';
+    const currentTheme = themeToggleButton.dataset.theme || 'light';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     updateThemeUI(newTheme);
   });
 
+  
   const fetchUser = async (username) => {
-    if (!username || username.trim() === '') {
-      errorMessage.style.display = 'block';
+    if (!username.trim()) {
+      showError(true);
       return;
     }
 
-    errorMessage.style.display = 'none';
+    showError(false);
 
     try {
-      const response = await fetch(API_URL + username);
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          errorMessage.style.display = 'block';
-        }
+      const res = await fetch(`${API_URL}${username}`);
+      if (!res.ok) {
+        if (res.status === 404) showError(true);
         return;
       }
-
-      const data = await response.json();
-      updateProfileInfo(data);
-
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      errorMessage.style.display = 'block';
+      const userData = await res.json();
+      updateProfileInfo(userData);
+    } catch (err) {
+      console.error('Fetch error:', err);
+      showError(true);
     }
   };
 
-  const formatJoinDate = (dateString) => {
-    const date = new Date(dateString);
+  
+  const showError = (show) => {
+    errorMessage.style.display = show ? 'block' : 'none';
+  };
+
+  
+  const formatJoinDate = (dateStr) => {
+    const date = new Date(dateStr);
     const day = date.getDate();
     const month = date.toLocaleString('en-GB', { month: 'short' });
     const year = date.getFullYear();
     return `Joined ${day} ${month} ${year}`;
   };
 
+  
   const updateProfileInfo = (user) => {
     avatar.src = user.avatar_url;
-    userName.textContent = user.name || user.login;
+    userName.textContent = user.name ?? user.login;
     userLogin.textContent = `@${user.login}`;
     userLogin.href = user.html_url;
     joinDate.textContent = formatJoinDate(user.created_at);
-    bio.textContent = user.bio || 'This profile has no bio';
+    bio.textContent = user.bio ?? 'This profile has no bio';
     repos.textContent = user.public_repos;
     followers.textContent = user.followers;
     following.textContent = user.following;
 
-    updateSocialLink(locationEl, user.location);
-    updateSocialLink(websiteEl, user.blog, true);
-    updateSocialLink(twitterEl, user.twitter_username, true, `https://twitter.com/${user.twitter_username}`);
-    updateSocialLink(companyEl, user.company);
+    updateSocial(locationEl, user.location);
+    updateSocial(websiteEl, user.blog, true);
+    updateSocial(twitterEl, user.twitter_username, true, `https://twitter.com/${user.twitter_username}`);
+    updateSocial(companyEl, user.company);
   };
 
-  const updateSocialLink = (element, value, isLink = false, linkHref = '') => {
+ 
+  const updateSocial = (element, value, isLink = false, href = '') => {
     const listItem = element.closest('li');
     if (value) {
       element.textContent = value;
-      if (isLink) {
-        element.href = linkHref || value;
-      }
-      listItem.classList.remove('not-available');
+      if (isLink) element.href = href || value;
+      listItem?.classList.remove('not-available');
     } else {
       element.textContent = 'Not Available';
-      if (isLink) {
-        element.removeAttribute('href');
-      }
-      listItem.classList.add('not-available');
+      if (isLink) element.removeAttribute('href');
+      listItem?.classList.add('not-available');
     }
   };
 
-  searchButton.addEventListener('click', () => {
-    fetchUser(searchInput.value.trim());
+  
+  searchButton.addEventListener('click', () => fetchUser(searchInput.value));
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') fetchUser(searchInput.value);
   });
 
-  searchInput.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      fetchUser(searchInput.value.trim());
-    }
-  });
-
+  
   initTheme();
   fetchUser('octocat');
 });
