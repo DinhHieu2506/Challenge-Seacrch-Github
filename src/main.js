@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const updateThemeUI = (theme) => {
     const themeText = theme === 'light' ? 'Dark' : 'Light';
-    const themeIcon = theme === 'light' ? 'icon-moon.svg' : 'icon-sun.svg';
+    const themeIcon = theme === 'light' ? 'icon_moon.svg' : 'icon_sun.svg';
 
     themeToggleButton.innerHTML = `
       ${themeText}
